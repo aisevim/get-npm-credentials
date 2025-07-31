@@ -39,4 +39,4 @@ jobs:
       - name: Show .npmrc token line (masked)
         run: |
           echo "Token line in .npmrc:"
-          grep "//hub.xeditor.com/repository/xeditor/:_authToken" ~/.npmrc || echo "Token not found"
+          cat ~/.npmrc || echo "Token not found"
