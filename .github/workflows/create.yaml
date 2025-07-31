@@ -18,7 +18,7 @@ jobs:
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
           NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
         run: |
-          npm-cli-login -u "$NPM_USERNAME" -p "$NPM_PASSWORD" --registry https://hub.xeditor.com/repository/xeditor --scope=@xeditor
+          npm-cli-login -u "$NPM_USERNAME" -p "$NPM_PASSWORD" -e "$NPM_EMAIL" --registry https://hub.xeditor.com/repository/xeditor --scope=@xeditor
 
       - name: Show .npmrc token line (masked)
         run: |
