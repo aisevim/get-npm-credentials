@@ -1,0 +1,26 @@
+name: NPM Login and Get Token
+
+on:
+  workflow_dispatch:
+
+jobs:
+  npm-login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install npm-cli-login
+        run: npm install -g npm-cli-login
+
+      - name: Login to npm registry without email
+        env:
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
+        run: |
+          npm-cli-login -u "$NPM_USERNAME" -p "$NPM_PASSWORD" --registry https://hub.xeditor.com/repository/xeditor --scope=@xeditor
+
+      - name: Show .npmrc token line (masked)
+        run: |
+          echo "Token line in .npmrc:"
+          grep "//hub.xeditor.com/repository/xeditor/:_authToken" ~/.npmrc || echo "Token not found"
