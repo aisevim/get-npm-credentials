@@ -19,21 +19,27 @@ jobs:
           NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
         run: |
-          echo '#!/usr/bin/expect -f
-          set timeout 15
-          set username $env(NPM_USERNAME)
-          set password $env(NPM_PASSWORD)
-          set email $env(NPM_EMAIL)
-          set registry "https://hub.xeditor.com/repository/xeditor"
-          set scope "@xeditor"
-          spawn npm login --registry=$registry --scope=$scope
-          expect "Username:" { send "$username\r" }
-          expect "Password:" { send "$password\r" }
-          expect "Email:" { send "$email\r" }
-          expect eof
-          ' > npm-login.exp
-          chmod +x npm-login.exp
-          ./npm-login.exp
+          export NPM_USERNAME=$NPM_USERNAME
+          export NPM_PASSWORD=$NPM_PASSWORD
+
+          set -e
+          
+          # Vérifie les variables d'environnement
+          : "${NPM_USERNAME:?Variable NPM_USERNAME non définie}"
+          : "${NPM_PASSWORD:?Variable NPM_PASSWORD non définie}"
+          : "${NPM_EMAIL:?Variable NPM_EMAIL non définie}"
+          
+          REGISTRY="https://hub.xeditor.com/repository/xeditor"
+          SCOPE="@xeditor"
+          
+          npm login --registry="$REGISTRY" --scope="$SCOPE" <<EOF
+          $NPM_USERNAME
+          $NPM_PASSWORD
+          $NPM_EMAIL
+          EOF
+          
+          echo "== Contenu de ~/.npmrc =="
+          cat ~/.npmrc
 
       - name: Show .npmrc token line (masked)
         run: |
