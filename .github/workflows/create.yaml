@@ -19,7 +19,22 @@ jobs:
           NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
         run: |
-          npm-cli-login -u "$NPM_USERNAME" -p "$NPM_PASSWORD" -e "$NPM_EMAIL" --registry https://hub.xeditor.com/repository/xeditor --scope=@xeditor
+          USERNAME="$NPM_USERNAME"
+          PASSWORD="$NPM_PASSWORD"
+          EMAIL="$NPM_EMAIL"
+          REGISTRY="https://hub.xeditor.com/repository/xeditor/"
+          
+          # Encode en base64 : username:password
+          AUTH=$(echo -n "$USERNAME:$PASSWORD" | base64)
+          
+          # Écrit la config .npmrc dans le répertoire utilisateur
+          cat <<EOF > ~/.npmrc
+          @xeditor:registry=${REGISTRY}
+          //hub.xeditor.com/repository/xeditor/:_auth=${AUTH}
+          //hub.xeditor.com/repository/xeditor/:always-auth=true
+          email=${EMAIL}
+          strict-ssl=false
+          EOF
 
       - name: Show .npmrc token line (masked)
         run: |
