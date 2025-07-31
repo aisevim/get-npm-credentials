@@ -19,24 +19,10 @@ jobs:
           NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
         run: |
-          export NPM_USERNAME=$NPM_USERNAME
-          export NPM_PASSWORD=$NPM_PASSWORD
-
-          set -e
-          
-          # Vérifie les variables d'environnement
-          : "${NPM_USERNAME:?Variable NPM_USERNAME non définie}"
-          : "${NPM_PASSWORD:?Variable NPM_PASSWORD non définie}"
-          : "${NPM_EMAIL:?Variable NPM_EMAIL non définie}"
-          
           REGISTRY="https://hub.xeditor.com/repository/xeditor"
           SCOPE="@xeditor"
           
-          npm login --registry="$REGISTRY" --scope="$SCOPE" --loglevel verbose <<EOF
-          $NPM_USERNAME
-          $NPM_PASSWORD
-          $NPM_EMAIL
-          EOF
+          printf "%s\n%s\n" "$NPM_USERNAME" "$NPM_PASSWORD" | npm login --registry="$REGISTRY" --scope="$SCOPE" --loglevel verbose
           
           echo "== Contenu de ~/.npmrc =="
           cat ~/.npmrc
