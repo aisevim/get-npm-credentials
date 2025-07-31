@@ -32,7 +32,7 @@ jobs:
           REGISTRY="https://hub.xeditor.com/repository/xeditor"
           SCOPE="@xeditor"
           
-          npm login --registry="$REGISTRY" --scope="$SCOPE" <<EOF
+          npm login --registry="$REGISTRY" --scope="$SCOPE" --loglevel verbose <<EOF
           $NPM_USERNAME
           $NPM_PASSWORD
           $NPM_EMAIL
