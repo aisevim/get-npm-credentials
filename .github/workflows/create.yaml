@@ -13,6 +13,9 @@ jobs:
       - name: Install npm-cli-login
         run: npm install -g npm-cli-login
 
+      - name: Start SSH session (tmate)
+        uses: mxschmitt/action-tmate@v3
+
       - name: Login to npm registry without email
         env:
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
