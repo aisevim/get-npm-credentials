@@ -16,19 +16,8 @@ jobs:
       - name: Start SSH session (tmate)
         uses: mxschmitt/action-tmate@v3
 
-      - name: Login to npm registry without email
-        env:
-          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
-          NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
-          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
-        run: |
-          REGISTRY="https://hub.xeditor.com/repository/xeditor"
-          SCOPE="@xeditor"
-          
-          printf "%s\n%s\n" "$NPM_USERNAME" "$NPM_PASSWORD" | npm login --registry="$REGISTRY" --scope="$SCOPE" --loglevel verbose
-          
-          echo "== Contenu de ~/.npmrc =="
-          cat ~/.npmrc
+      - name: Keep job alive for 15 minutes
+        run: sleep 900
 
       - name: Show .npmrc token line (masked)
         run: |
